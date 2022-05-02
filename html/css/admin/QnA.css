@@ -1,0 +1,8 @@
+/* 
+@Filename: QnA.css
+@Author: 최진 (choij2494@gmail.com)
+@description: The file to be used in the admin-QnA.html file.
+*/
+.table > tbody > tr > td {
+    vertical-align: middle;
+}

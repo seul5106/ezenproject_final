@@ -1,0 +1,543 @@
+<!--
+    @Filename: productDetail.html
+    @Author: 정한슬 (seul5106@gmail.com)
+    @description: 상품관리 상세페이지 html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/admin/layout.css">
+    <link rel="stylesheet" href="../../css/admin/productDetail.css">
+</head>
+
+<body>
+    <!-- 헤더입니다. -->
+    <div data-init="../inc/admin-header.html"></div>
+    <!-- 서브 타이틀 영역입니다. -->
+    <div class="container">
+        <div class="content-header">
+            <h3 class="content-title pull-left">상품관리</h3>
+            <span class="content-sub-title pull-right">홈-상품관리-상품상세</span>
+        </div>
+
+
+        <form class="clearfix prodContainer" id="formData">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label for="classification">분류</label>
+                    <div>
+                        <select name="productCategorie" id="productCategorie">
+                            <option class="prodSelect" value="">전체분류</option>
+                            <option class="prodSelect" value="t">케이크&티라미슈</option>
+                            <option class="prodSelect" value="v">빙수&파르페</option>
+                            <option class="prodSelect" value="m">마카롱&오믈렛</option>
+                            <option class="prodSelect" value="c">쿠키&파이</option>
+                            <option class="prodSelect" value="b">베이커리</option>
+                        </select>
+                        <div style="margin-top:19px">
+                            <strong>상품 상태 선택 &nbsp;</strong>
+                            <input type="radio" id="contectState1" name="productState" value="Y">
+                            <label for="contectState1">보이기</label>
+
+                            <input type="radio" id="contectState2" name="productState" value="N">
+                            <label for="contectState2">감추기</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-5">
+                    <div class="col-md-8 imageRender">
+                        <label for="img" class="prodImage">상품 이미지</label>
+                        <img src="http://placehold.it/130x130" name="img" id="img" style="border:1px solid 
+                        rgb(167, 163, 163)">
+                    </div>
+                    <!-- 상품 이미지를 전송합니다 -->
+                    <input type="file" id="profileImg" name="profileImg" accept=".jpg, .jpeg, .png">
+                </div>
+                <div class="col-md-5 product-info">
+                    <div class="col-md-10">
+                        <label for="productName" class="col-md-4">상품명</label>
+                        <input type="text" name="productName" id="productName" />
+                    </div>
+                    <div class="col-md-10">
+                        <label for="sale-price" class="col-md-4">판매가격</label>
+                        <input type="text" name="productPrice" id="productPrice" maxlength="10" />
+                    </div>
+                    <div class="col-md-10">
+                        <label for="stock" class="col-md-4">재고</label>
+                        <input type="text" name="productStock" id="productStock" maxlength="11" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group col-md-12">
+                <label for="product-details" class="pull-left">부가설명</label>
+                <input type="text" class="form-control" name="productDesc" id="productDesc"></input>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="productNutri">영양정보</label>
+                <input type="text" class="form-control" name="productNutri" id="productNutri"></input>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="allergy-info" class="pull-left">알레르기 정보</label>
+                <input type="text" class="form-control" name="productAllergy" id="productAllergy"></input>
+            </div>
+            <button class="btn btn-primary pull-right btn-admin-setting" id="cancel" type="button">취소</button>
+            <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">삭제</button>
+            <button class="btn btn-primary pull-right btn-admin-setting" type="submit" id="save">저장</button>
+        </form>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../assets/layout.js"></script>
+    <script src="../../js/regex_helper.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        //백엔드로 보낼 값이 담겨있는 변수모음입니다.
+        let values = {
+            productCategorie: null,
+            productName: null,
+            productPrice: null,
+            productStock: null,
+            productDesc: null,
+            productNutri: null,
+            productAllergy: null,
+            productImage: null,
+            productState: null,
+            productCode: null
+        }
+
+
+        // URL 파라미터를 가져옵니다.
+        const params = new URLSearchParams(window.location.search);
+        values.productCode = params.get('prod');
+
+
+        // 동적으로 input 값을 할당합니다.
+        const dataOutput = (data) => {
+            data.map((v, i) => {
+                document.getElementById("productCategorie").value = v.product_categorie;
+                document.getElementById("productName").value = v.product_name;
+                document.getElementById("productPrice").value = v.product_price;
+                document.getElementById("productStock").value = v.product_stock;
+                document.getElementById("productDesc").value = v.product_desc;
+                document.getElementById("productNutri").value = v.product_nutri;
+                document.getElementById("productAllergy").value = v.product_allergy;
+                document.querySelector("#img").setAttribute("src", `../../..${v.product_img}`);
+                // 라디오버튼 동적 할당
+                if(v.product_state == "Y"){
+                    document.getElementById("contectState1").checked = true;
+                } else {
+                    document.getElementById("contectState2").checked = true;
+                }
+            })
+        }
+        // 유효성검사가 실행될 함수입니다.
+        const regexHelpers = () => {
+            // 유효성검사 클래스를 가져옵니다.
+            const regexHelper = new RegexHelper();
+            let productImg = document.querySelector("#img").src;
+            let dropdown = document.querySelector("#productCategorie");
+            // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
+            let choose = dropdown.selectedIndex;
+            // 선택된 option의 value 및 카테고리 
+            let productCategorie = dropdown[choose].value;
+
+            // 선택된 상태 값을 가져옵니다.
+            let productState = document.querySelector("input[name='productState']:checked");
+            console.log(productState);
+
+            if (!productCategorie) {
+                Swal.fire({
+                    text: "카테고리 값을 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+
+            if (!productState) {
+                Swal.fire({
+                    text: "상품 상태 값을 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+
+            if (productImg == "http://placehold.it/130x130") {
+                Swal.fire({
+                    text: "상품 이미지를 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+
+            if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+
+            if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+
+
+
+            if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+
+
+            if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+            if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+            if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+            return true;
+        }
+        // 값을 저장합니다.
+        const setValues = () => {
+            // 드롭다운의 값을 가져옵니다.
+            let dropdown = document.querySelector("#productCategorie");
+            // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
+            let choose = dropdown.selectedIndex;
+            // 선택된 option의 value 및 카테고리 
+            values.productCategorie = dropdown[choose].value;
+
+            //백엔드로 보낼 값이 담겨있는 변수모음입니다.
+            values.productName = document.querySelector("#productName").value;
+            values.productPrice = document.querySelector("#productPrice").value;
+            values.productStock = document.querySelector("#productStock").value;
+            values.productDesc = document.querySelector("#productDesc").value;
+            values.productNutri = document.querySelector("#productNutri").value;
+            values.productAllergy = document.querySelector("#productAllergy").value;
+            values.productState = document.querySelector("input[name='productState']:checked").value;
+        }
+        // URL을 강제 이동 합니다.
+        const goLocation = (url) => {
+            return location.href = `${url}`
+        }
+
+        //URL에 파라미터가 있을때 
+        if (values.productCode) {
+            // 값 불러오기
+            (async () => {
+                let data = null;
+                // 통신
+                try {
+                    const response = await axios.get(`/product/${values.productCode}`)
+                    data = response.data.item;
+                } catch (e) {
+                    Swal.fire({
+                        text: "서버와 접속이 실패했습니다.",
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                }
+                // 데이터를 출력합니다.
+                dataOutput(data);
+            })();
+            // 저장버튼의 이름을 수정으로 바꿉니다.
+            document.querySelector("#save").innerHTML = "수정";
+            // 전송이벤트
+            document.querySelector("#formData").addEventListener("submit", e => {
+                e.preventDefault();
+
+                // 유효성검사가 맞다면
+                if (regexHelpers()) {
+                    // 값을 할당합니다.
+                    setValues();
+                    // 알럿 팝업
+                    Swal.fire({
+                        title: '상품을 수정하시겠습니까?',
+                        icon: 'warning',
+                        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                        confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+                        reverseButtons: true, // 버튼 순서 거꾸로
+                    }).then(async result => {
+                        // 확인버튼을 눌렀을 경우
+                        if (result.isConfirmed) {
+                            // 이미지가 없을경우
+                            if (values.productImage == null) {
+                                console.log(values.productName);
+                                // form데이터에 코드 값 추가
+                                console.log("이미지가 없거나, 수정버튼일시 실행");
+                                try {
+                                    // 백엔드 통신
+                                    await axios.put('/product', {
+                                        productName: values.productName,
+                                        productPrice: values.productPrice,
+                                        productStock: values.productStock,
+                                        productCategorie: values.productCategorie,
+                                        productDesc: values.productDesc,
+                                        productNutri: values.productNutri,
+                                        productAllergy: values.productAllergy,
+                                        productState: values.productState,
+                                        prod: values.productCode
+                                    });
+                                    // 통신이 성공했을 경우
+
+                                } catch (error) {
+                                    // sweetalert
+                                    Swal.fire({
+                                        title: "수정이 되지 않았습니다.",
+                                        text: `${error}`,
+                                        icon: 'warning',
+                                        confirmButtonText: '확인'
+                                    });
+                                }
+                                Swal.fire({
+                                    text: "수정이 완료되었습니다!",
+                                    icon: 'success',
+                                    confirmButtonText: '확인'
+                                }).then(result => {
+                                    goLocation("/html/admin/product.html");
+                                });
+
+                                // 이미지가 있을경우
+                            } else {
+                                let formData = new FormData();
+                                // 폼 데이터를 넘깁니다.
+                                formData.append('productName', values.productName);
+                                formData.append('productPrice', values.productPrice);
+                                formData.append('productStock', values.productStock);
+                                formData.append('productCategorie', values.productCategorie);
+                                formData.append('productDesc', values.productDesc);
+                                formData.append('productNutri', values.productNutri);
+                                formData.append('productAllergy', values.productAllergy);
+                                formData.append('productState', values.productState);
+                                formData.append('prod', values.productCode);
+                                formData.append('photo', values.productImage);
+                                // form데이터에 코드 값 추가
+                                console.log("이미지가 있거나 수정버튼일시");
+                                console.log(values.productImage);
+                                try {
+                                    // 백엔드 통신
+                                    await axios.put('/productImg', formData, {
+                                        headers: {
+                                            'Content-Type': 'multipart/form-data',
+                                        }
+                                    });
+                                } catch (error) {
+                                    Swal.fire({
+                                        title: "수정이 되지 않았습니다.",
+                                        text: `${error}`,
+                                        icon: 'warning',
+                                        confirmButtonText: '확인'
+                                    });
+                                }
+                                Swal.fire({
+                                    text: "수정이 완료되었습니다!",
+                                    icon: 'success',
+                                    confirmButtonText: '확인'
+                                }).then(result => {
+                                    goLocation("/html/admin/product.html");
+                                });
+                            }
+                        }
+                    });
+                };
+            });
+            // URL 파라미터가 없을 때
+        } else {
+            // 삭제버튼을 없앱니다.
+            document.getElementById("delete").style = "display: none";
+            // 전송이벤트
+            document.querySelector("#formData").addEventListener("submit", e => {
+                e.preventDefault();
+                // 유효성검사가 맞다면
+                if (regexHelpers()) {
+                    // 값 할당
+                    setValues();
+                    // formData 준비
+                    let formData = new FormData();
+                    // 폼 데이터를 넘깁니다.
+                    formData.append('productName', values.productName);
+                    formData.append('productPrice', values.productPrice);
+                    formData.append('productStock', values.productStock);
+                    formData.append('productCategorie', values.productCategorie);
+                    formData.append('productDesc', values.productDesc);
+                    formData.append('productNutri', values.productNutri);
+                    formData.append('productState', values.productState);
+                    formData.append('productAllergy', values.productAllergy);
+                    formData.append('photo', values.productImage);
+
+                    //스위트 알럿
+                    Swal.fire({
+                        title: '상품을 저장하시겠습니까?',
+                        icon: 'warning',
+                        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                        confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+                        reverseButtons: true, // 버튼 순서 거꾸로
+                    }).then(async result => {
+                        // 확인 시
+                        if (result.isConfirmed) {
+                            // 통신
+                            try {
+                                await axios.post('/product', formData, {
+                                    headers: {
+                                        'Content-Type': 'multipart/form-data',
+                                    }
+                                });
+                            } catch (e) {
+                                Swal.fire({
+                                    title: '서버와 통신이 되지 않았습니다.',
+                                    icon: 'warning',
+                                    confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                                });
+                            }
+                            Swal.fire({
+                                text: "저장이 완료되었습니다!",
+                                icon: 'success',
+                                confirmButtonText: '확인'
+                            }).then(result => {
+                                goLocation("/html/admin/product.html");
+                            });
+                        };
+                    });
+                }
+            });
+        }
+
+        // 파일 업로드를 감지합니다.(썸네일 및 파일 객체 전송)
+        document.querySelector("#profileImg").addEventListener("change", e => {
+            e.preventDefault();
+            let img = document.querySelector("#img");
+            // 만약 현재 이벤트의 타겟에 값이 없다면
+            if (!e.currentTarget.files[0]) {
+                img.src = ""
+                return;
+            } else {
+                img.src = URL.createObjectURL(e.currentTarget.files[0]);
+            }
+            values.productImage = e.currentTarget.files[0]
+            console.log(values.productImage);
+        });
+
+        // 삭제버튼 이벤트
+        // document.getElementById("delete").addEventListener("click", e => {
+        //     Swal.fire({
+        //         title: '상품을 삭제하시겠습니까?',
+        //         text: '삭제된 상품은 복구할 수 없습니다.',
+        //         icon: 'warning',
+        //         showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        //         confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        //         cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        //         confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+        //         cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+        //         reverseButtons: true, // 버튼 순서 거꾸로
+        //     }).then(async result => {
+        //         // 확인버튼을 눌렀을시
+        //         if (result.isConfirmed) {
+        //             // 통신에 사용할 값이 담긴 객체
+        //             let keys = {
+        //                 key: [values.productCode]
+        //             }
+        //             // 통신
+        //             try {
+        //                 const response = await axios.delete('/product', {
+        //                     data: keys
+        //                 })
+        //                 console.log(response);
+        //             } catch (err) {
+        //                 Swal.fire({
+        //                     title: '서버와 통신이 되지 않았습니다.',
+        //                     icon: 'warning',
+        //                     confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+        //                 });
+        //             }
+        //             Swal.fire({
+        //                 title: '삭제되었습니다.',
+        //                 icon: 'warning',
+        //                 confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+        //             }).then(result => {
+        //                 // 상품페이지로 강제이동합니다.
+        //                 goLocation("/html/admin/product.html");
+        //             });
+        //         }
+
+        //     });
+        // });
+
+        // 취소버튼 이벤트
+        document.getElementById("cancel").addEventListener("click", e => {
+            // 스위트알럿2
+            Swal.fire({
+                title: '취소하시겠습니까?',
+                icon: 'warning',
+                showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+                reverseButtons: true, // 버튼 순서 거꾸로
+            }).then(result => {
+                // 상품페이지로 강제이동합니다.
+                goLocation("/html/admin/product.html");
+            });
+        });
+    </script>
+</body>
+
+</html>

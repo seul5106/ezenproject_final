@@ -1,0 +1,356 @@
+<!-- @Filename: cart.html
+@Author: 최진 (choij2494@gmail.com)
+@description: cart HTML structure.
+
+
+cart 페이지의 적용될 html 구조 파일입니다.  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!--  -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/cart.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <div data-init="./inc/header.html"></div>
+
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <!-- 내용 안쪽부분입니다. -->
+            <div class="inner-content min-height">
+                <!-- 제목부분입니다. -->
+                <h1 class="cart-title title">나의 장바구니</h1>
+                <!-- 제목 안쪽 미결제 항목부분입니다. -->
+                <div class="cart-sub-title">
+                    <span class="unpaid-count">미결제항목(0개)</span>
+                    <input type="button" class="btn-cancle-01-on pull-right" value="선택 상품 삭제">
+                </div>
+                <!-- 장바구니 목록을 카운트합니다. -->
+                <div class="box-cart-content">
+                    <!-- 동적으로 채워질 부분입니다. -->
+                </div>
+
+                <!-- 값이 없다면 나올 로고입니다. -->
+                <div class="not-value-logo">
+                </div>
+            </div>
+
+
+            <!-- 장바구니 합계 부분입니다. -->
+            <div class="box-cart-total">
+                <h2>장바구니 합계</h2>
+                <hr>
+                <!-- 갯수 박스들 입니다. -->
+                <div class="box-total">
+                    <span class="prod-total">전체 상품 개수</span>
+                    <span class="prod-total-number pull-right">0개</span>
+                </div>
+                <hr>
+                <div class="box-total">
+                    <span class="money-total">상품 금액</span>
+                    <span class="money-total-number pull-right">0원</span>
+                </div>
+                <hr>
+                <div class="box-total">
+                    <span class="paid-money">결제 금액</span>
+                    <span class="paid-money-number pull-right">0원</span>
+                </div>
+                <hr style="margin-bottom: 0;">
+                <!-- 결제 버튼 박스입니다. -->
+                <form action="" name="cart-total" method="" id="cart-total">
+                    <input type="submit" value="00000원 결제하기" class="btn-common btn-cart-submit">
+                </form>
+            </div>
+        </section>
+    </div>
+    <script src="../js/number_utils.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+    <!-- 아임포트 부분 -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js" type="text/javascript"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        let data = null;
+
+        // 통신
+        (async () => {
+            // 성공
+            try {
+                const response = await axios.get(`/cart`);
+                data = response.data.item;
+                console.log(data);
+                // 실패
+            } catch (e) {
+                console.log(e);
+            };
+            // data
+            data.map((v, i) => {
+                console.log(v);
+                let innerBox = document.querySelector(".box-cart-content");
+                innerBox.innerHTML += `
+                <div class="box-cart div-center clearfix">
+                <a href="#">
+                    <img class="pull-left" src="${v.product_img}" alt="#">
+                </a>
+                <div class="box-cart-inner pull-right">
+                    <input type="checkbox" class="check-prod pull-right" name="check" value=${v.cart_code}>
+                    <span class="box-cart-prod-name">${v.product_name}</span>
+                    <span class="box-cart-money pull-right" data-money="${v.product_price}">${(formatPrice(v.product_price))}원</span>
+                    <input type="button" class="btn-plus-01-on pull-right" value="+">
+                    <span class="cart-count">${v.product_count}</span>
+                    <input type="button" class="btn-minus-01-on pull-right" value="–">
+                    <button class="btn-basketModifyQuanity pull-right" data-cart_code=${v.cart_code}><img class='pull-right' src="../img/btn_quantity_modify.gif" alt="변경" /></button>
+                </div>
+            </div>`
+            })
+
+            //변경 버튼 이벤트
+            const basketModifyQuanity = document.querySelectorAll('.btn-basketModifyQuanity');
+
+            Array.from(basketModifyQuanity).map((v, i) => {
+                v.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    const current = e.currentTarget;
+
+                    const cartCode = current.dataset.cart_code;
+                    const countArray = getProdNum()
+                    const prodCount = countArray[i]
+
+                    try {
+                        const response = await axios.patch(`/cart/${cartCode}`, {
+                            no: cartCode,
+                            product_count: prodCount
+                        })
+                    } catch (e) {
+                        console.log(e)
+                    };
+                })
+            })
+
+            // 장바구니 로직
+            getPaymentData();
+        })();
+
+
+        // 상품 갯수가 들어있는 배열을 리턴합니다.
+        function getProdNum() {
+            let countArray = [];
+            document.querySelectorAll(".cart-count").forEach((v) => {
+                countArray.push(parseInt(v.innerHTML));
+            });
+            return countArray;
+        }
+
+        // 2. 장바구니 로직
+        function getPaymentData() {
+            // box-cart가 있는지 없는지 감지하는 변수입니다.
+            let content = document.querySelector(".inner-content .box-cart");
+            // // 상품 플러스 버튼입니다.
+            let btnPlus = document.querySelectorAll(".btn-plus-01-on");
+            // // 상품 마이너스 버튼입니다.
+            let btnMinus = document.querySelectorAll(".btn-minus-01-on");
+            // // 상품의 총 갯수입니다.
+            let count = 0;
+
+            // 상품 목록의 데이터머니에있는 값을 가져와 상품가격 배열에 순차적으로 넣습니다.
+            const getProdPrice = () => {
+                let moneyArray = [];
+                document.querySelectorAll(".box-cart-money").forEach((v) => {
+                    console.log(v.dataset.money);
+                    moneyArray.push(v.dataset.money);
+                });
+                return moneyArray;
+            }
+            // 로고를 생성하고 감춥니다.
+            const logos = (boolean = false) => {
+                let logo = document.querySelector(".not-value-logo");
+                if (boolean == true) {
+                    // 클래스 display-on을 추가합니다.
+                    logo.classList.add('display-on');
+                    //클래스 display-off를 삭제합니다.
+                    logo.classList.remove('display-off');
+                } else {
+                    logo.classList.remove('display-on');
+                    logo.classList.add('display-off');
+                }
+            }
+            // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+            const unpaidCountings = () => {
+                let unpaidCount = document.querySelector(".unpaid-count").innerHTML;
+                // box-cart-content의 자식 갯수를 파악합니다.
+                let contentCount = document.querySelector(".box-cart-content").childElementCount;
+                // console.log(contentCount);
+                // // 미결제항목의 갯수 파악하여 동적으로 문자열을 바꿉니다.
+                let unpaidCounting = unpaidCount.replace(unpaidCount.substring(unpaidCount.indexOf("(")), `(${contentCount}개)`);
+                // // 바꾼 문자열을 출력시킵니다.
+                document.querySelector(".unpaid-count").innerHTML = unpaidCounting;
+            }
+            // 상품목록이 없다면 로고를 생성합니다.
+            const notContentLogo = () => {
+                content = document.querySelector(".inner-content .box-cart");
+                // 상품목록이 없다면
+                if (!content) {
+                    logos(true);
+                }
+            }
+            // 결과함수
+            const result = () => {
+                // // 총 합산한 금액입니다.
+                let totalMoney = document.querySelector(".money-total-number");
+                // // 총 결제할 금액입니다.
+                let payMoney = document.querySelector(".paid-money-number");
+                // // 총 전체 상품 개수 입니다.
+                let totalProdNum = document.querySelector(".prod-total-number");
+                // // 상품의 총 갯수입니다.
+                count = 0;
+                // // 상품의 총 금액입니다.
+                let money = 0;
+                // countArray는 getProdNum 함수의 배열값을 받아 저장합니다.
+                let countArray = getProdNum();
+                // 머니어레이는 getProdPrice의 배열값을 받아 저장합니다.
+                let moneyArray = getProdPrice();
+                // 서버로 보낼 가격입니다.
+                let submitMoney = document.querySelector(".btn-cart-submit");
+
+                // 전체상품의 총 갯수는
+                countArray.map((v) => {
+                    count += v
+                })
+                // 전체상품의 총 가격은
+                moneyArray.map((v, i) => {
+                    money += moneyArray[i] * countArray[i]
+                });
+                console.log(money);
+                // 장바구니 합계에 출력됩니다.
+                totalProdNum.innerHTML = count + "개";
+                totalMoney.innerHTML = formatPrice(money) + "원";
+                payMoney.innerHTML = formatPrice(parseInt(money + (money / 100))) + "원";
+                // 서버로 보낼 가격입니다.
+                submitMoney.setAttribute("value", `${formatPrice(parseInt(money + (money / 100)))}원 결제하기`)
+            }
+
+
+            // 상품목록이 없다면
+            if (!content) {
+                // 로고를 생성하고 감춥니다.
+                logos(true);
+                // 상품목록이 있다면 
+            } else {
+                // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+                unpaidCountings();
+                // 로고를 생성하고 감춥니다.
+                logos();
+                // 선택상품삭제 버튼을 눌렀을 시 실행될 이벤트 함수입니다.
+                document.querySelector(".btn-cancle-01-on").addEventListener("click", async (e) => {
+                    let check = document.querySelectorAll("input[name=check]:checked");
+                    // 백엔드에 값을 넘겨줄 keys 입니다.
+                    //check를 검사합니다.
+
+                    Swal.fire({
+                        title: "정말 장바구니에서 삭제하시겠습니까?",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "확인",
+                        cancelButtonText: "취소",
+                    }).then(async (success) => {
+                        if (success.isConfirmed) {
+                            let keys = Array.from(check).map((v) => {
+                                // box-cart를 지웁니다.
+                                v.closest(".box-cart").remove();
+                                // 숫자형식으로 된 밸류를 배열형식으로 리턴
+                                return parseInt(v.value);
+                            });
+                            try {
+                                await axios.delete('/cart', {
+                                    data: { cart_code: keys }
+                                });
+                            } catch (error) {
+                                Swal.fire({
+                                    title: "서버와 접속이 실패했습니다.",
+                                    confirmButtonColor: "#3085d6",
+                                    confirmButtonText: "확인",
+                                });
+                            }
+                            //상품목록이 없다면 로고를 생성합니다
+                            notContentLogo();
+                            // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+                            unpaidCountings();
+                            //결과함수
+                            result();
+                            // 알림
+                            Swal.fire({
+                                title: "삭제가 완료되었습니다.",
+                                confirmButtonColor: "#3085d6",
+                                confirmButtonText: "확인",
+                            });
+
+                        }
+                    });
+                    //상품목록이 없다면 로고를 생성합니다
+                    notContentLogo();
+                    // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+                    unpaidCountings();
+                    //결과함수
+                    result();
+                });
+                // 선택상품삭제 끝
+
+                // 상품 추가/삭제버튼 이벤트입니다.
+                btnPlus.forEach((v) => {
+                    v.addEventListener("click", (e) => {
+                        let prodNum = Number(v.nextElementSibling.innerHTML);
+                        prodNum++;
+                        v.nextElementSibling.innerHTML = prodNum;
+                        result();
+                    })
+                });
+                btnMinus.forEach((v) => {
+                    v.addEventListener("click", (e) => {
+                        let prodNum = Number(v.previousElementSibling.innerHTML);
+                        prodNum--
+                        if (prodNum <= 0) {
+                            prodNum = 1;
+                        }
+                        v.previousElementSibling.innerHTML = prodNum;
+                        result();
+                    })
+                });
+
+                result();
+                // 장바구니 로직 끝
+
+                // 결제하기 버튼 클릭 시 주문서 작성 페이지로 연결
+                document.getElementById("cart-total").addEventListener("click", async e => {
+                    e.preventDefault();
+
+                    location.href = '/html/payment.html'
+
+                })
+
+            }
+        }
+    </script>
+</body>
+
+</html>

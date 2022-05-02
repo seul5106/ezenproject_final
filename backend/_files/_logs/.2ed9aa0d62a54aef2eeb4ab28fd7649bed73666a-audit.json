@@ -1,0 +1,60 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "/Users/choijin/ezen_project/_files/_logs/.2ed9aa0d62a54aef2eeb4ab28fd7649bed73666a-audit.json",
+    "files": [
+        {
+            "date": 1644154103124,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220206.log",
+            "hash": "ddc4e7682ad68460695db6cf8b916f5d"
+        },
+        {
+            "date": 1644303560221,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220208.log",
+            "hash": "31e2ba59faa7d0e7523feddffa85dc9f"
+        },
+        {
+            "date": 1644389488163,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220209.log",
+            "hash": "34c9a85023d37b27bdfa14d205a7625d"
+        },
+        {
+            "date": 1644418809602,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220210.log",
+            "hash": "3d0cb9acc1be0e77eef72c00cf91a185"
+        },
+        {
+            "date": 1644560850232,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220211.log",
+            "hash": "7a6cc16deae7359809d8c8733816731a"
+        },
+        {
+            "date": 1644645311744,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220212.log",
+            "hash": "ba9b7610b668f7ea04ecf27e62f918a7"
+        },
+        {
+            "date": 1644711469110,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220213.log",
+            "hash": "e8dc18dcd19952e4320331ddc21fb214"
+        },
+        {
+            "date": 1644815328655,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220214.log",
+            "hash": "742433c239623f962117f38dfbdfebee"
+        },
+        {
+            "date": 1644910240121,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220215.log",
+            "hash": "d233ef28565ac04c12a747000f0f484f"
+        },
+        {
+            "date": 1644937209190,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220216.log",
+            "hash": "009312cd521cee06dc63b20197e1d591"
+        }
+    ],
+    "hashType": "md5"
+}

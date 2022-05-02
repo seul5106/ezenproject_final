@@ -1,0 +1,30 @@
+/* 
+@Filename: admin order-detail.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: 관리자 order-detail css.
+*/
+
+.wrap{
+    max-width: 1100px !important;
+    margin: auto;
+    width: 95%;    
+}
+
+table th{
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+th, td {
+    line-height: 2em !important;
+    letter-spacing: 0.1em !important;
+}
+
+td{
+    text-indent: 10px;
+}
+
+/* 상품정보와 합계 테이블간 간격 */
+.prodTable{
+    margin-bottom: 2px;
+}

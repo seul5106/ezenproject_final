@@ -1,0 +1,88 @@
+/* 
+@Filename: menu.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: tab menu css.
+*/
+
+
+/* 전체 영역 최소 높이 설정 */
+.container{
+    min-height: 910px;
+}
+
+/* menu-top 영역 
+-------------------------*/
+.menu-top{
+    padding: 25px 0;
+    margin-top: 30px;
+    height: 140px;
+}
+
+.img-box{
+    height: 120px;
+    width: 120px;
+    margin: auto;
+}
+
+.img-box a{
+    height: 140px;
+    width: 100%;
+}
+
+.img-box img{
+    display: block;
+    height: 120px;
+    margin: auto;
+}
+
+.menu-top .tit h1{
+    text-align: center;
+}
+
+/* menu-line 영역
+-------------------------*/
+
+.menu-line {
+    display: block;
+    width: 100%;
+    height: 7px;
+    background-color: #f0f0f0;
+}
+
+/* menu-list 영역
+-------------------------*/
+.menu-list {
+    padding-top: 25px;
+    padding-left: 15px;
+}
+
+.menu1, .menu2, .menu3, .menu4 {
+    margin-bottom:35px ;
+}
+
+.menu-list .title{
+    display: block;
+    font-weight: bold;
+}
+
+a{
+    display: block;
+    height: 30px;
+    padding: 0 15px;
+    line-height: 35px;
+    font-size: 0.7em;
+}
+
+.logout {
+    width: 90px;
+    height: 27px;
+    border: 1px #eee;
+    border-radius: 5px;
+    font-size:15px;
+    color: #eee;
+    float: right;
+    margin-left: 100px;
+    background-color: rgb(0, 0, 0);
+    position: relative;
+    right: 20px;
+}

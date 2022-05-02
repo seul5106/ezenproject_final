@@ -1,0 +1,52 @@
+<!-- @Filename: index.html
+@Author: 최진 (choij2494@gmail.com)
+@description: HTML common apply it.
+
+
+사용자 페이지의 공통으로 적용될 html 구조 파일입니다.  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <!--  -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/reset.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <div data-init="./inc/header.html"></div>
+        
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <!-- 사이드바 부분입니다(왼쪽) -->
+            <nav></nav>
+            <!-- 내용 안쪽부분입니다. -->
+            <article></article>
+            <!-- 사이드바 부분입니다(오른쪽) -->
+            <aside></aside>
+        </section>
+
+        <!-- 푸터부분입니다. -->
+        <div data-init="./inc/footer.html"></div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+</body>
+
+</html>

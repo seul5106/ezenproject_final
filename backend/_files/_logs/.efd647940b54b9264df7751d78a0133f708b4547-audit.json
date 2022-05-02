@@ -1,0 +1,55 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "/Users/choijin/ezen_project/backend/_files/_logs/.efd647940b54b9264df7751d78a0133f708b4547-audit.json",
+    "files": [
+        {
+            "date": 1645159798723,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220218.log",
+            "hash": "73709965f6ce0ac4cfdf83dafde17cfb"
+        },
+        {
+            "date": 1645346306326,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220220.log",
+            "hash": "73f3c8f70b458f85a6fa35f3e9c5339b"
+        },
+        {
+            "date": 1645427963622,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220221.log",
+            "hash": "42fb0119bc6c451adb2c33027b975f65"
+        },
+        {
+            "date": 1645509006781,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220222.log",
+            "hash": "fb3096017a215348418911c57f559539"
+        },
+        {
+            "date": 1645605440574,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220223.log",
+            "hash": "3f6bd2d2f45bab5ffe76df5de452f5d4"
+        },
+        {
+            "date": 1645657869343,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220224.log",
+            "hash": "e4b2e0327f310d5f6e363ed89912ea83"
+        },
+        {
+            "date": 1645775398647,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220225.log",
+            "hash": "0bba14dbe4b2192895eb61a23d4de912"
+        },
+        {
+            "date": 1645853476174,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220226.log",
+            "hash": "a91754ade7511c88ad3bc271cbeb8ca3"
+        },
+        {
+            "date": 1647915727926,
+            "name": "/Users/choijin/ezen_project/backend/_files/_logs/log_220322.log",
+            "hash": "a6c6698306740ff55cb8a49cc978bc3e"
+        }
+    ],
+    "hashType": "md5"
+}

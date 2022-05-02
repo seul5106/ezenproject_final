@@ -1,0 +1,108 @@
+<!-- @Filename: ordered.html
+@Author: 최진 (choij2494@gmail.com)
+@description: ordered HTML structure.
+
+
+cart html 구조 파일입니다.  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- CSS 참조 파일 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/ordered.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <div data-init="./inc/header.html"></div>
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <!-- 내용 안쪽부분입니다. -->
+            <article>
+                <!-- 제목 -->
+                <h1 class="order-title">주문내역</h1>
+                <!-- 박스 부분 -->
+                <a href="#">
+                    <!-- 값이 없다면 숨겨질 주문목록 박스입니다. -->
+                    <div class="order-container">
+                        <!-- 박스 안 내용 부분입니다. -->
+
+                    </div>
+                </a>
+                <!-- 값이 없다면 나올 로고 이미지의 부분입니다. -->
+                <div class="not-value-logo">
+                </div>
+            </article>
+        </section>
+        <!-- 푸터부분입니다. -->
+        <div data-init="./inc/footer.html"></div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+
+
+    <script>
+        (async()=>{
+
+            // orders 테이블에서 데이터 가져오기
+            let data = null;
+            try {
+                const response = await axios.get(`/order`)
+                data = response.data.item
+            }catch(e){
+                Swal.fire({
+                    text: "서버와 접속이 실패했습니다.",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            };
+
+            // 데이터 여부에 따라 로고 노출 설정
+            let logo = document.querySelector('.not-value-logo')
+
+            if(data.length == 0){ // 데이터가 없을 경우 로고 노출
+                logo.classList.add('display-on');
+                logo.classList.remove('display-off');
+            } else { // 데이터가 있을 경우 로고 off
+                logo.classList.remove('display-on');
+                logo.classList.add('display-off');
+            } 
+
+            // 데이터 출력
+            let orderBox = document.querySelector(".order-container")
+            data.map((v) => {
+                orderBox.innerHTML += `<div class="order-box clearfix" onclick="location.href ='http://${window.location.host}/html/order_confirm.html?mer=${v.merchant_uid}'"><img class="pull-left" src="../img/icon_null.png" alt="주문내역">
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">주문번호 :</p>
+                            <p class="order-number">${v.merchant_uid}</p>
+                        </div>
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">주문날짜 :</p>
+                            <p class="order-date">${v.order_date}</p>
+                        </div>
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">합계금액 : &nbsp;</p>
+                            <p class="order-product">&nbsp;${v.order_total_price} 원</p>
+                        </div></div>`
+            })
+        })();
+    </script>
+</body>
+
+</html>

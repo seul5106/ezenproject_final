@@ -1,0 +1,155 @@
+<!-- 
+@Filename: main.html
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: main HTML
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <title>main</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- CSS 참조 -->
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/headerfooter.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/product.css" />
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <div data-init="./inc/header.html"></div>
+
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <div class="wrap">
+                <div class="title">
+                    <h1>Dessert40 Menu</h1>
+                    <h3 id="menu-name">메뉴명</h3>
+                </div>
+                <div class="menu-wrap">
+                    <!-- <div class="product">
+              <div class="frame">
+                <img src="" alt="" />
+              </div>
+              <div class="txt">
+                <span>상품명:</span>
+                <span>0,000원</span>
+              </div>
+              <button class="btn-detail">자세히보기</button>
+            </div> -->
+                </div>
+        </section>
+
+        <!-- 푸터부분입니다. -->
+        <div data-init="./inc/footer.html"></div>
+    </div>
+
+    <!-- menus 데이터 불러오기 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+    <!-- 가격 이쁘게 보여주는 함수 가져오기 -->
+    <script type="text/javascript" src="../js/number_utils.js"></script>
+    <!-- sweetAlert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // URL에 담겨있는 cate라는 값을 가져옵니다.
+        const searchParams = new URLSearchParams(window.location.search);
+        const params = searchParams.get('cate') || "";
+        
+        // cate가 있다면
+        if (params) {
+              // 사용자가 메인 페이지 진입시엔 케이크&티라미슈 상품 노출
+              // 통신
+            (async () => {
+                let data = null;
+                try {
+                    // 통신값을 가져와서 response 변수에 저장합니다.
+                    const response = await axios.get('/product', {
+                        params: {
+                            cate: params
+                        }
+                    });
+
+                    data = response.data.item;
+                } catch (e) {
+                    Swal.fire({
+                        title: "서버와 접속이 실패했습니다.",
+                        text: `${e}`,
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                }
+
+                // 상품 카테고리를 검색어 파라미터 명으로 분류하여 생성
+                switch (params) {
+                    case "t":
+                        document.getElementById("menu-name").innerHTML = "케이크&티라미슈"
+                        break;
+                    case "v":
+                        document.getElementById("menu-name").innerHTML = "빙수&파르페"
+                        break;
+                    case "m":
+                        document.getElementById("menu-name").innerHTML = "마카롱&오믈렛"
+                        break;
+                    case "c":
+                        document.getElementById("menu-name").innerHTML = "쿠키&파이"
+                        break;
+                    case "b":
+                        document.getElementById("menu-name").innerHTML = "베이커리"
+                        break;
+                    default:
+                        console.log("값이 없습니다.");
+                        break;
+                }
+
+                // 동적으로 돔을 생성할 부모요소입니다.
+                const target = document.querySelector(".menu-wrap");
+
+                data.map((value, index) => {
+                    // 가격 3자리마다 , 찍어주기
+                    const localePrice = formatPrice(value.product_price);
+
+                    // target안에 넣을 자식요소입니다.
+                    const element = document.createElement("div");
+                    element.classList.add("product");
+                    element.innerHTML = `<div class="frame">
+                <img src="${value.product_img}" alt="" />
+                </div>
+                <div class="txt">
+                <span>${value.product_name}</span>
+                <span>${localePrice}원</span>
+                </div>
+                <button class="btn-detail" data-id=${value.product_code}>자세히보기</button>`;
+                    target.appendChild(element);
+                })
+
+                // 자세히보기 버튼 눌렀을 때 동작
+                document.querySelectorAll(".btn-detail").forEach((v, i) => {
+                    // DOM같은 배열 요소 하나하나의 클릭 이벤트를 감지합니다.
+                    v.addEventListener("click", e => {
+                        // 버튼에 담겨있는 dataset의 id값을 추출해서 가져옵니다.
+                        window.location.href = `./productDetail.html?prod=${v.dataset.id}`;
+                    })
+                })
+            })();
+        }
+
+    </script>
+</body>
+
+</html>

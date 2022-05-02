@@ -1,0 +1,137 @@
+/* 
+@Filename: order_confirm.css
+@Author: 정한슬 (seul5106@gmail.com)
+@description: 주문확인(결제완료)css
+*/
+
+
+/* 원래있던 cart.css 기본 참조하고 css수정해서 위치만 바꿈*/
+
+.unpaid-count {
+    font-weight: bold;
+}
+
+.box-cart {
+    border-radius: 9px;
+    width: 95%;
+    height: 150px;
+    background-color: rgb(236, 236, 236);
+    margin-bottom: 10px;
+  }
+  /* 제품 이미지부분입니다. */
+  .box-cart img {
+    display: block;
+    height: 100%;
+    width: 150px;
+  }
+  /* 상품 상세 정보 박스입니다. */
+  .box-cart-inner {
+    display: block;
+    width: 50%;
+    height: 100%;
+    position: relative;
+  }
+  /* 상품명: 부분입니다. */
+  .box-cart-prod {
+    display: block;
+    margin-left: 10px;
+    margin-top: 25px;
+    font-size: 15px;
+  }
+  /* ~~~~ 상품 이름이 올 부분입니다. */
+  .box-cart-prod-name {
+    display: block;
+    margin-top: 25px;
+    font-size: 15px;
+  }
+  /* 상품 가격부분입니다. */
+  .box-cart-money {
+    margin-top: 40px;
+    margin-right: 30px;
+    position: absolute;
+    right: -9px;
+    bottom: 66px;
+    font-size: 0.9em;
+  }
+
+  .cart-count{
+      position: absolute;
+      top: 90px;
+      left: 105px;
+      width: 40px;
+  }
+
+
+/* 배송정보*/
+
+.delivery-confirm {
+    position: relative;
+    margin-top: 50px;
+}
+
+.delivery-confirm h2 {
+    text-indent: 10px;
+}
+
+.delivery-confirm span {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.delivery-info-name {
+    margin: 0;
+    width: 100%;
+}
+
+.delivery-form {
+    width: 100%;
+    display: flex;
+}
+
+.text-indent {
+    flex-shrink: 0;
+    width: 140px;
+    text-indent: 10px;
+}
+
+.flex-grow {
+    color: rgb(88, 88, 88);
+    flex-grow: 1;
+}
+
+.form-group:after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+.form-group {
+  padding-top: 10px;
+ 
+}
+
+.form-control {
+  width: 100%;
+  height: 30px;
+  padding: 5px 0;
+  font-size: 14px;
+  border: 1px solid rgb(175, 175, 175);
+}
+
+.text-center {
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  color: #eee;
+  background: #000;
+  border-radius: 6px;
+  border: #000;
+}
+
+button:active {
+  background-color: rgb(85, 85, 85);
+}
