@@ -393,8 +393,6 @@ module.exports = (app) => {
     //로그아웃 기능
     router.delete("/members/logout", async (req, res, next) => {
 
-        let sessionInfo = req.session.memberInfo;
-
         try {
             // 데이터 베이스 접속
             dbcon = await mysql2.createConnection(config.database);
@@ -406,10 +404,32 @@ module.exports = (app) => {
         } catch (e) {
             return next(e);
         } finally {
+            res.clearCookie("connect.sid") // 세션 쿠키 삭제
             dbcon.end();
         }
+        
         res.sendJson();
     });
 
+    //로그인된 페이지에 아이디를 남기기 위한 기능
+    router.get("/members/session/Id", async (req, res, next) =>{
+        let sessionInfo = req.session.memberInfo;
+        let json = null;
+        try {
+            // 데이터 베이스 접속
+            dbcon = await mysql2.createConnection(config.database);
+            await dbcon.connect();
+
+            // 데이터 조회
+            const sql = "SELECT * FROM sessions";
+            const [result] = await dbcon.query(sql);
+            json = result
+        } catch (e) {
+            return next(e);
+        } finally {
+            dbcon.end();
+        }
+        res.sendJson({ item: sessionInfo});
+    });
     return router;
 }

@@ -27,7 +27,7 @@
 
 <body>
     <!-- 헤더입니다. -->
-    <div data-init="../inc/admin-header.html"></div>
+    <div class="admin-header"></div>
     <!-- 서브 타이틀 영역입니다. -->
     <div class="container">
         <div class="content-header">
@@ -103,6 +103,8 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/layout.js"></script>
     <script src="../../js/number_utils.js"></script>
+    <!-- 헤더 -->
+    <script src="../../js/admin_header.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         let order = params.get('order');

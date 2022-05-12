@@ -50,7 +50,7 @@ module.exports = {
         host: 'localhost',
         port: 3306,
         user: 'root',
-        password: 'han3588s1!!',
+        password: 'root',
         database: "dessert40",
         dateStrings: 'date',
 

@@ -30,7 +30,7 @@
 
 <body>
     <!-- 헤더입니다. -->
-    <div data-init="../inc/admin-header.html"></div>
+    <div class="admin-header"></div>
     <!-- 서브 타이틀 영역입니다. -->
     <div class="container">
         <div class="content-header">
@@ -88,6 +88,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../assets/layout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <!-- 헤더 -->
+    <script src="../../js/admin_header.js"></script>
     <script id="members-list-template" type="text/x-handlebars-template">
         {{#each item}}
         <tr class="table-content text-center">
