@@ -15,6 +15,7 @@ module.exports.myip = () => {
         item.map((v, i) => {
             if (v.family == "IPv4" && v.address != "127.0.0.1") {
                 ipAddress.push(v.address);
+                ipAddress.push("118.67.129.217");
             }
         })
     }

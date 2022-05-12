@@ -1,0 +1,35 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "/home/tester/ezenproject_final/backend/_files/_logs/.c1885656ebd24eb2fcbd6760a2ae8e69b007a4e2-audit.json",
+    "files": [
+        {
+            "date": 1651728307153,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220505.log",
+            "hash": "c75130ffc4cb583c6b9cf869a1fa0fdc"
+        },
+        {
+            "date": 1651816191842,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220506.log",
+            "hash": "14b9a8fcdbdcb4a8ac89f6bcf0f13d51"
+        },
+        {
+            "date": 1651935127346,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220507.log",
+            "hash": "1db65e006a5b74ce038cccee9b787f36"
+        },
+        {
+            "date": 1652017358914,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220508.log",
+            "hash": "f972c565dece34bb7bce5d4ab6bcdcc6"
+        },
+        {
+            "date": 1652106105008,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220509.log",
+            "hash": "48ea0eea8da1d3a9c6fc4e78704fcda5"
+        }
+    ],
+    "hashType": "md5"
+}

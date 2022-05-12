@@ -1,0 +1,35 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "/home/tester/ezenproject_final/backend/_files/_logs/.09492af659b759a0efb9aa59ec71415a1e7711f4-audit.json",
+    "files": [
+        {
+            "date": 1651728307152,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220505.log",
+            "hash": "6763aee30abd0264be60f17a7005316c"
+        },
+        {
+            "date": 1651816191840,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220506.log",
+            "hash": "640a60d778cb90b4bf97d0fdd35e19e3"
+        },
+        {
+            "date": 1651935127344,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220507.log",
+            "hash": "508aa4528756b99782fde19c5c451bfa"
+        },
+        {
+            "date": 1652017358913,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220508.log",
+            "hash": "615695023bde2bc70741d0b89b874100"
+        },
+        {
+            "date": 1652106105007,
+            "name": "/home/tester/ezenproject_final/backend/_files/_logs/log_220509.log",
+            "hash": "fbedaddbac9b4924ce7fb31d7ed9fea4"
+        }
+    ],
+    "hashType": "md5"
+}
